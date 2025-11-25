@@ -8,12 +8,12 @@
 A novel approach to sentiment analysis that weights word vectors based on their dependency relationships within sentences. The hypothesis is that verbs, as the core of sentences, might carry more sentiment weight (e.g., "love" vs "hate" being more significant than variations in their objects).
 
 ## Scope 
-The scope of this project was to see whether weighting word vectors by a scalar based upon their depdency relationship within the sentences of the training data might be useful for text categorization of positive and negative sentiment. The linguistic theory behind this is that it is often said that verbs are the core of the sentence and the rest of the sentence is built around them. As such, it might be reasonable to think that weighting the verb as more important will increase the accuracy of the model as compared to a Bag of Words approach. EG "I love you"  and "I hate you" are almost entirely different but "I hate this" and "I hate that" are rather similar.
+The scope of this project was to see whether weighting word vectors by a scalar based upon their dependency relationship within the sentences of the training data might be useful for text categorization of positive and negative sentiment. The linguistic theory behind this is that it is often said that verbs are the core of the sentence and the rest of the sentence is built around them. As such, it might be reasonable to think that weighting the verb as more important will increase the accuracy of the model as compared to a Bag of Words approach. For example, "I love you" and "I hate you" are almost entirely different, but "I hate this" and "I hate that" are rather similar.
 
 ### Key Points
-- **What's the deliverable?**: A model in which you can initially weight word vectors on the traing-data to artificially raise or lower the magnitude of certain word vectors and hence their importance in the model. Along with thise a nearly identical model that doesn't weight the vectors to use as a neutral baseline.
-- **Boundaries**: We do not deal much beyond one sentneces reviews and if this weighting model might be more useful for non theme based classification such as identifying a literary genre given a text. We also did not take a look beyond binary labels such positive, negative, neutral classification. Nor did we implement multi-label where a text can be labeled as more than one category. This is because something cannot be both positive and negative.
-- **Pipeline** Imagine you are a peice of training data. The first thing that happens to you is that you are read into a tuple that is in a list and your annotation of 1 or 0 is turned into a dictionary format. Then you are processed into a doc a datatype. Here you split into a goldlabel version and non-gold label version. These two versions are then put back together into an example datatype. You are then fed to the train function as part a batch. 
+- **What's the deliverable?**: A model in which you can initially weight word vectors on the training data to artificially raise or lower the magnitude of certain word vectors and hence their importance in the model. Along with this, a nearly identical model that doesn't weight the vectors to use as a neutral baseline.
+- **Boundaries**: We do not deal much beyond one-sentence reviews and whether this weighting model might be more useful for non-theme-based classification such as identifying a literary genre given a text. We also did not take a look beyond binary labels such as positive, negative, or neutral classification. Nor did we implement multi-label where a text can be labeled as more than one category. This is because something cannot be both positive and negative.
+- **Pipeline**: Imagine you are a piece of training data. The first thing that happens to you is that you are read into a tuple that is in a list and your annotation of 1 or 0 is turned into a dictionary format. Then you are processed into a doc (a datatype). Here you split into a gold label version and non-gold label version. These two versions are then put back together into an example datatype. You are then fed to the train function as part of a batch. 
 
 ## Requirements
 ### Python Dependencies
@@ -25,20 +25,20 @@ The scope of this project was to see whether weighting word vectors by a scalar 
 - Pickle
 
 ### Data Files
-- kaggle_og.txt: Original dataset file from Kaggle
-- training_set.txt: Training data
-- dev_set.txt: Development/validation data
-- test_set.txt: Test data
+- `data_cleaning/kaggle_og.txt`: Original dataset file from Kaggle
+- `baseline_model/training_set.txt` and `weighted_model/training_set.txt`: Training data
+- `baseline_model/dev_set.txt` and `weighted_model/dev_set.txt`: Development/validation data
+- `baseline_model/test_set.txt` and `weighted_model/test_set.txt`: Test data for final evaluation
 
 ## Technical Approach
- We decided to add a textcat pipeline to spacy which classifies an input based on the number of categories/labels you give to pipeline and annotations you add to your docs(a doc is Spacey datatype). We then need to prepare our annotated docs to be fed into the model. We do this by creating an Example datatype which holds one doc with the gold label and one with the initial training label. The model then trains on the Examples using the update function within the train function of our code. 
+We decided to add a textcat pipeline to spaCy which classifies an input based on the number of categories/labels you give to the pipeline and annotations you add to your docs (a doc is a spaCy datatype). We then need to prepare our annotated docs to be fed into the model. We do this by creating an Example datatype which holds one doc with the gold label and one with the initial training label. The model then trains on the Examples using the update function within the train function of our code. 
 
 ## Execution and How to Run
 
 ### Running the Models
 1. To evaluate model performance:
-   - Run `weighted_model.py` for the dependency-weighted model
-   - Run `baseline_model.py` for the baseline model
+   - Run `weighted_model/weighted_model.py` for the dependency-weighted model
+   - Run `baseline_model/baseline_model.py` for the baseline model
 
 ### Analyzing Results
 1. For weighted model results:
@@ -57,7 +57,7 @@ The scope of this project was to see whether weighting word vectors by a scalar 
 
 ## File Structure and Functions
 
-### Data Cleaning Directory (`/data_cleaning/`)
+### Data Cleaning Directory (`data_cleaning/`)
 - **get_datasets.py**
   - Creates training, development, and test datasets from raw Kaggle data
   - Implements random splitting with configurable percentages (default 70/15/15)
@@ -82,7 +82,7 @@ The scope of this project was to see whether weighting word vectors by a scalar 
   - Used as source data for training/dev/test set creation
 
 ### Model Directories
-#### Baseline Model (`/baseline_model/`)
+#### Baseline Model (`baseline_model/`)
 - **baseline_model.py**
   - Implements standard spaCy text categorization without dependency weighting
   - Provides baseline performance metrics for comparison
@@ -94,7 +94,7 @@ The scope of this project was to see whether weighting word vectors by a scalar 
   - Analyzes baseline model performance
   - Creates visualizations and statistics for baseline results
 
-#### Weighted Model (`/weighted_model/`)
+#### Weighted Model (`weighted_model/`)
 - **weighted_model.py**
   - Implements text categorization with dependency-weighted word vectors
   - Applies different weights based on dependency relationships
@@ -111,7 +111,7 @@ The scope of this project was to see whether weighting word vectors by a scalar 
     - `average_scalar_accuracy()`: Calculates average accuracy by weight scalar
     - `plot()`: Visualizes performance metrics across different weights
 
-Both directories use the same split datasets:
+Both model directories contain their own copies of the split datasets:
 - **training_set.txt**: Main training data
 - **dev_set.txt**: Development/validation data
 - **test_set.txt**: Test data for final evaluation
